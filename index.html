@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Electron API Test</title>
+</head>
+<body>
+<h1>API 요청 테스트</h1>
+<button id="sendRequest">Send API Request</button>
+<pre id="response"></pre>
+
+<script>
+    const { ipcRenderer } = require('electron');
+
+    document.getElementById('sendRequest').addEventListener('click', async () => {
+        const url = 'https://jsonplaceholder.typicode.com/todos/1'; // 예시 API
+        const method = 'GET';
+        const headers = {};
+        const data = null;
+
+        const response = await ipcRenderer.invoke('make-api-request', { url, method, headers, data });
+
+        if (response.success) {
+            document.getElementById('response').textContent = JSON.stringify(response.data, null, 2);
+        } else {
+            document.getElementById('response').textContent = 'Error: ' + response.error;
+        }
+    });
+</script>
+</body>
+</html>
